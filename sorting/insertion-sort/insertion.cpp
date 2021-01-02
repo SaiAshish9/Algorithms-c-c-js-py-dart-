@@ -6,7 +6,7 @@
 
 // ctrl + alt +f AStyleFormattor c/c++/c#
 
-// ctrl + shift + p -> python AutoPEP8
+// ctrl + shift + 8 -> python AutoPEP8
 
 using namespace std;
 static  vector<int> v;
