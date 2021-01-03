@@ -1,92 +1,61 @@
-// Java program to 
-// implement Tree Sort 
-class GFG 
-{ 
 
-	// Class containing left and 
-	// right child of current 
-	// node and key value 
-	class Node 
-	{ 
-		int key; 
-		Node left, right; 
+// Tree sort is a sorting algorithm that is based on Binary Search Tree data structure.
+// It first creates a binary search tree from the elements of the input list or array
+// and then performs an in-order
+// traversal on the created binary search tree to get the elements in sorted order.
 
-		public Node(int item) 
-		{ 
-			key = item; 
-			left = right = null; 
-		} 
-	} 
+#include<bits/stdc++.h>
+using namespace std;
 
-	// Root of BST 
-	Node root; 
+struct Node
+{
+	int key;
+	struct Node *left, *right;
+};
 
-	// Constructor 
-	GFG() 
-	{ 
-		root = null; 
-	} 
+struct Node *newNode(int item)
+{
+	struct Node *temp = new Node;
+	temp->key = item;
+	temp->left = temp->right = NULL;
+	return temp;
+}
+void storeSorted(Node *root, int arr[], int &i)
+{
+	if (root != NULL)
+	{
+		storeSorted(root->left, arr, i);
+		arr[i++] = root->key;
+		storeSorted(root->right, arr, i);
+	}
+}
+Node* insert(Node* node, int key)
+{
+	if (node == NULL) return newNode(key);
+	if (key < node->key)
+		node->left = insert(node->left, key);
+	else if (key > node->key)
+		node->right = insert(node->right, key);
+	return node;
+}
 
-	// This method mainly 
-	// calls insertRec() 
-	void insert(int key) 
-	{ 
-		root = insertRec(root, key); 
-	} 
-	
-	/* A recursive function to 
-	insert a new key in BST */
-	Node insertRec(Node root, int key) 
-	{ 
+void treeSort(int arr[], int n)
+{
+	struct Node *root = NULL;
+	root = insert(root, arr[0]);
+	for (int i = 1; i < n; i++)
+		root = insert(root, arr[i]);
+	int i = 0;
+	storeSorted(root, arr, i);
 
-		/* If the tree is empty, 
-		return a new node */
-		if (root == null) 
-		{ 
-			root = new Node(key); 
-			return root; 
-		} 
+	int main()
+	{
+		int arr[] = {5, 4, 7, 2, 11};
+		int n = sizeof(arr) / sizeof(arr[0]);
+		treeSort(arr, n);
+		for (int i = 0; i < n; i++)
+			cout << arr[i] << " ";
+		return 0;
+	}
 
-		/* Otherwise, recur 
-		down the tree */
-		if (key < root.key) 
-			root.left = insertRec(root.left, key); 
-		else if (key > root.key) 
-			root.right = insertRec(root.right, key); 
-
-		/* return the root */
-		return root; 
-	} 
-	
-	// A function to do 
-	// inorder traversal of BST 
-	void inorderRec(Node root) 
-	{ 
-		if (root != null) 
-		{ 
-			inorderRec(root.left); 
-			System.out.print(root.key + " "); 
-			inorderRec(root.right); 
-		} 
-	} 
-	void treeins(int arr[]) 
-	{ 
-		for(int i = 0; i < arr.length; i++) 
-		{ 
-			insert(arr[i]); 
-		} 
-		
-	} 
-
-	// Driver Code 
-	public static void main(String[] args) 
-	{ 
-		GFG tree = new GFG(); 
-		int arr[] = {5, 4, 7, 2, 11}; 
-		tree.treeins(arr); 
-		tree.inorderRec(tree.root); 
-	} 
-} 
-
-// This code is contributed 
-// by Vibin M 
+// avg nlogn  worst n*n time ,  n space
